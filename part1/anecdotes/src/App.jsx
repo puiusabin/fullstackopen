@@ -12,8 +12,9 @@ const App = () => {
     "The only way to go fast, is to go well.",
   ];
 
-  const [votes, setVotes] = useState([0, 0, 0, 0, 0]);
+  const [votes, setVotes] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0]);
   const [selected, setSelected] = useState(0);
+  const highestVotes = votes.indexOf(Math.max(...votes));
 
   const handleVoteClick = () => {
     const copy = [...votes];
@@ -23,12 +24,20 @@ const App = () => {
 
   return (
     <div>
+      <h1>anecdote of the day</h1>
       <p>{anecdotes[selected]}</p>
       <p>has {votes[selected]} votes</p>
       <button onClick={handleVoteClick}>Vote</button>
-      <button onClick={() => setSelected(Math.floor(Math.random() * 4))}>
+      <button
+        onClick={() =>
+          setSelected(Math.floor(Math.random() * anecdotes.length))
+        }
+      >
         next anecdote
       </button>
+      <h1>anecdote with most votes</h1>
+      <p>{anecdotes[highestVotes]}</p>
+      <p>has {votes[highestVotes]} votes</p>
     </div>
   );
 };
