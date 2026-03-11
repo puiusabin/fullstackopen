@@ -1,8 +1,20 @@
-# [Full Stack Open](https://fullstackopen.com/en/)
+# Full Stack Open — Solutions
 
-This course is held at the Department of Computer Science at the University of Helsinki.
+Course by the University of Helsinki. [fullstackopen.com](https://fullstackopen.com/en/)
 
-It serves as an introduction to modern web application development with JavaScript. The main focus is on building single page applications with ReactJS that use REST APIs built with Node.js. This repository contains my solutions for this course's exercises.
+This course serves as an introduction to modern web application development with JavaScript. The main focus is on building single page applications with ReactJS that use REST APIs built with Node.js. The course also contains a section on GraphQL, a modern alternative to REST APIs.
 
-### [Part 0 - Fundamentals of Web apps](./part0)
+```
+fullstackopen/
+├── part0/  # Fundamentals of Web apps
+│   ├── 0.4_new-note.md
+│   ├── 0.5_single-page-app.md
+│   └── 0.6_new-note-spa.md
+└── part1/  # Introduction to React
+    ├── anecdotes/
+    ├── courseinfo/
+    └── unicafe/
+```
 
+**Part 0** — [Fundamentals of Web apps](./part0)
+**Part 1** — [Introduction to React](./part1)
