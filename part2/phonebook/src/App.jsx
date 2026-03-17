@@ -75,11 +75,18 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault();
-    persons.find((person) => person.name === newName)
-      ? alert(`${newName} is already added to phonebook`)
-      : personsService
-          .create({ name: newName, number: newNumber })
-          .then((data) => setPersons(persons.concat(data)));
+    const person = persons.find((person) => person.name === newName);
+    if (person) {
+      personsService
+        .update(person.id, { ...person, number: newNumber })
+        .then((data) =>
+          setPersons(persons.map((p) => (p.id === person.id ? data : person))),
+        );
+    } else {
+      personsService
+        .create({ name: newName, number: newNumber })
+        .then((data) => setPersons(persons.concat(data)));
+    }
   };
 
   const personsToShow =
