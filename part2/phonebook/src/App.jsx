@@ -52,10 +52,6 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
-  const [filteredPersons, setFilteredPersons] = useState(persons);
-  const handleNameChange = (event) => {
-    setNewName(event.target.value);
-  };
 
   useEffect(() => {
     axios
@@ -63,23 +59,37 @@ const App = () => {
       .then((response) => setPersons(response.data));
   }, []);
 
+  const handleNameChange = (event) => {
+    setNewName(event.target.value);
+  };
+
   const handleNewNumber = (event) => {
     setNewNumber(event.target.value);
   };
 
   const handleFilter = (event) => {
     setFilter(event.target.value);
-    setFilteredPersons(
-      persons.filter((person) => person.name.toLowerCase().includes(filter)),
-    );
   };
 
   const addPerson = (event) => {
     event.preventDefault();
     persons.find((person) => person.name === newName)
       ? alert(`${newName} is already added to phonebook`)
-      : setPersons(persons.concat({ name: newName, number: newNumber }));
+      : axios
+          .post("http://localhost:3001/persons", {
+            name: newName,
+            number: newNumber,
+          })
+          .then((response) => setPersons(persons.concat(response.data)));
   };
+
+  const personsToShow =
+    filter === ""
+      ? persons
+      : persons.filter((person) =>
+          person.name.toLowerCase().includes(filter.toLowerCase()),
+        );
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -93,7 +103,7 @@ const App = () => {
         handleNewNumber={handleNewNumber}
       />
       <h2>Numbers</h2>
-      <Persons filteredPersons={filteredPersons} />
+      <Persons filteredPersons={personsToShow} />
     </div>
   );
 };
