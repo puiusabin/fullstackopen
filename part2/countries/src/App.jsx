@@ -1,9 +1,28 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+const api = import.meta.env.VITE_OPEN_WEATHER_MAP_KEY;
 
 const CountryInfo = ({ country }) => {
+  const [weather, setWeather] = useState(null);
   const languages = Object.values(country.languages);
   const flag = country.flags.png;
+
+  useEffect(() => {
+    axios
+      .get(
+        `http://api.openweathermap.org/geo/1.0/direct?q=${country.capital[0]}&limit=5&appid=${api}`,
+      )
+      .then((response) => {
+        const lat = response.data[0].lat;
+        const lon = response.data[0].lon;
+
+        axios
+          .get(
+            `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${api}`,
+          )
+          .then((response) => setWeather(response.data));
+      });
+  }, []);
   return (
     <div>
       <h1>{country.name.common}</h1>
@@ -16,6 +35,13 @@ const CountryInfo = ({ country }) => {
         ))}
       </ul>
       <img src={flag} alt="flag of country" />
+      {weather !== null ? (
+        <div>
+          <h2>Weather in {country.capital[0]}</h2>{" "}
+          <div>temperature {weather.main.temp} celsius</div>{" "}
+          <div>wind {weather.wind.speed} m/s</div>
+        </div>
+      ) : null}
     </div>
   );
 };
