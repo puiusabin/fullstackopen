@@ -83,6 +83,7 @@ const App = () => {
         .then((data) => {
           setPersons(persons.map((p) => (p.id === person.id ? data : person)));
           setNotificationMessage(`updated ${data.name}`);
+          setTimeout(() => setNotificationMessage(null), 5000);
         });
     } else {
       personsService
@@ -90,6 +91,7 @@ const App = () => {
         .then((data) => {
           setPersons(persons.concat(data));
           setNotificationMessage(`added ${data.name}`);
+          setTimeout(() => setNotificationMessage(null), 5000);
         });
     }
   };
