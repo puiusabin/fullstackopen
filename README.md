@@ -6,15 +6,20 @@ This course serves as an introduction to modern web application development with
 
 ```
 fullstackopen/
-├── part0/  # Fundamentals of Web apps
+├── part0/              # Fundamentals of Web apps
 │   ├── 0.4_new-note.md
 │   ├── 0.5_single-page-app.md
 │   └── 0.6_new-note-spa.md
-└── part1/  # Introduction to React
-    ├── anecdotes/
+├── part1/              # Introduction to React
+│   ├── anecdotes/
+│   ├── courseinfo/
+│   └── unicafe/
+└── part2/              # Communicating with server
+    ├── countries/
     ├── courseinfo/
-    └── unicafe/
+    └── phonebook/
 ```
 
 - **Part 0** — [Fundamentals of Web apps](./part0)
 - **Part 1** — [Introduction to React](./part1)
+- **Part 2** — [Communicating with server](./part2)
