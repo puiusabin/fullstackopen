@@ -82,15 +82,29 @@ const App = () => {
         .update(person.id, { ...person, number: newNumber })
         .then((data) => {
           setPersons(persons.map((p) => (p.id === person.id ? data : person)));
-          setNotificationMessage(`updated ${data.name}`);
+          setNotificationMessage({
+            text: `updated ${person.name}`,
+            type: "notification",
+          });
           setTimeout(() => setNotificationMessage(null), 5000);
+        })
+        .catch(() => {
+          setNotificationMessage({
+            text: `information of ${person.name} has already been deleted from the server`,
+            type: "error",
+          });
+          setTimeout(() => setNotificationMessage(null), 5000);
+          setPersons(persons.filter((p) => p.id !== person.id));
         });
     } else {
       personsService
         .create({ name: newName, number: newNumber })
         .then((data) => {
           setPersons(persons.concat(data));
-          setNotificationMessage(`added ${data.name}`);
+          setNotificationMessage({
+            text: `added ${data.name}`,
+            type: "notification",
+          });
           setTimeout(() => setNotificationMessage(null), 5000);
         });
     }
