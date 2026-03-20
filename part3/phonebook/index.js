@@ -24,14 +24,20 @@ const persons = [
   },
 ];
 
-app.get("/api/persons", (request, response) => {
-  response.json(persons);
-});
-
 app.get("/info", (request, response) => {
   response.send(
     `<div>phonebook has infor for ${persons.length} people</div> <br/> <div>${Date()}</div>`,
   );
+});
+
+app.get("/api/persons", (request, response) => {
+  response.json(persons);
+});
+
+app.get("/api/persons/:id", (request, response) => {
+  const id = request.params.id;
+  const person = persons.find((p) => p.id === id);
+  person ? response.json(person) : response.status(404).end();
 });
 
 const PORT = 3001;
