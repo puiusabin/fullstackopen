@@ -61,12 +61,13 @@ app.post("/api/persons", (request, response) => {
   const person = {
     id: Math.floor(Math.random() * 1000000),
     name: body.name,
-    number: body.name,
+    number: body.number,
   };
 
   persons = persons.concat(person);
   response.json(person);
 });
+
 const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`server listening on port ${3001}`);
