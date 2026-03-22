@@ -2,7 +2,7 @@ const express = require("express");
 const morgan = require("morgan");
 const app = express();
 
-app.use(static("dist"));
+app.use(express.static("dist"));
 app.use(express.json());
 
 morgan.token("body", (req, res) => JSON.stringify(req.body));
