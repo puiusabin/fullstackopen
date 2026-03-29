@@ -24,20 +24,24 @@ app.use(
   }),
 );
 
-app.get("/info", (request, response) => {
-  Person.countDocuments().then((count) => {
-    response.send(`
+app.get("/info", (request, response, next) => {
+  Person.countDocuments()
+    .then((count) => {
+      response.send(`
         <div>phonebook has info for ${count} people</div>
         <br/>
         <div>${new Date()}</div>
       `);
-  });
+    })
+    .catch((error) => next(error));
 });
 
-app.get("/api/persons", (request, response) => {
-  Person.find({}).then((persons) => {
-    response.json(persons);
-  });
+app.get("/api/persons", (request, response, next) => {
+  Person.find({})
+    .then((persons) => {
+      response.json(persons);
+    })
+    .catch((error) => next(error));
 });
 
 app.get("/api/persons/:id", (request, response, next) => {
@@ -62,24 +66,26 @@ app.delete("/api/persons/:id", (request, response, next) => {
     .catch((error) => next(error));
 });
 
-app.post("/api/persons", (request, response) => {
+app.post("/api/persons", (request, response, next) => {
   const body = request.body;
 
   if (!body.name || !body.number) {
     return response.status(400).json({ error: "name and number are required" });
   }
 
-  Person.findOne({ name: body.name }).then((person) => {
-    if (person) {
-      return response.status(400).json({ error: "name must be unique" });
-    } else {
-      const person = new Person({
-        name: body.name,
-        number: body.number,
-      });
-      person.save().then((result) => response.json(result));
-    }
-  });
+  Person.findOne({ name: body.name })
+    .then((person) => {
+      if (person) {
+        return response.status(400).json({ error: "name must be unique" });
+      } else {
+        const person = new Person({
+          name: body.name,
+          number: body.number,
+        });
+        person.save().then((result) => response.json(result));
+      }
+    })
+    .catch((error) => next(error));
 });
 
 app.put("/api/persons/:id", (request, response, next) => {
