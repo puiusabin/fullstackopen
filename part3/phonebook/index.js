@@ -82,6 +82,23 @@ app.post("/api/persons", (request, response) => {
   });
 });
 
+app.put("/api/persons/:id", (request, response, next) => {
+  const id = request.params.id;
+  const { name, number } = request.body;
+  Person.findById(id)
+    .then((person) => {
+      if (!person) {
+        return response.status(404).end();
+      }
+      person.name = name;
+      person.number = number;
+      return person.save().then((updatedPerson) => {
+        response.json(updatedPerson);
+      });
+    })
+    .catch((error) => next(error));
+});
+
 const errorHandler = (error, request, response, next) => {
   console.error(error);
   if (error.name === "CastError") {
