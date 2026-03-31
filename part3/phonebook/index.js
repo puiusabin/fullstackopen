@@ -2,13 +2,12 @@ require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
 const Person = require("./models/person");
-const person = require("./models/person");
 const app = express();
 
 app.use(express.static("dist"));
 app.use(express.json());
 
-morgan.token("body", (req, res) => JSON.stringify(req.body));
+morgan.token("body", (req) => JSON.stringify(req.body));
 app.use(
   morgan((tokens, req, res) => {
     return [
@@ -24,7 +23,7 @@ app.use(
   }),
 );
 
-app.get("/info", (request, response, next) => {
+app.get("/info", (_request, response, next) => {
   Person.countDocuments()
     .then((count) => {
       response.send(`
@@ -36,7 +35,7 @@ app.get("/info", (request, response, next) => {
     .catch((error) => next(error));
 });
 
-app.get("/api/persons", (request, response, next) => {
+app.get("/api/persons", (_request, response, next) => {
   Person.find({})
     .then((persons) => {
       response.json(persons);
@@ -110,7 +109,7 @@ app.put("/api/persons/:id", (request, response, next) => {
     .catch((error) => next(error));
 });
 
-const errorHandler = (error, request, response, next) => {
+const errorHandler = (error, _request, response, next) => {
   console.error(error);
   if (error.name === "CastError") {
     return response.status(400).send({ error: "malformatted id" });

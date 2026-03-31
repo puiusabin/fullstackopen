@@ -35,7 +35,7 @@ if (process.argv.length < 5) {
     number: number,
   });
 
-  note.save().then((result) => {
+  note.save().then(() => {
     console.log("person saved!");
     mongoose.connection.close();
   });
