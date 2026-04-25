@@ -14,10 +14,13 @@ fullstackopen/
 │   ├── anecdotes/
 │   ├── courseinfo/
 │   └── unicafe/
-└── part2/              # Communicating with server
-    ├── countries/
-    ├── courseinfo/
-    └── phonebook/
+├── part2/              # Communicating with server
+│   ├── countries/
+│   ├── courseinfo/
+│   └── phonebook/
+└── part3/              # Programming a server with NodeJS and Express
+    ├── phonebook/
+    └── phonebook-frontend/
 ```
 
 - **Part 0** — [Fundamentals of Web apps](./part0)
