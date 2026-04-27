@@ -103,6 +103,16 @@ describe("favorite blog", () => {
 describe("author with most blogs", () => {
   test("when list has multiple blogs", () => {
     const result = listHelper.mostBlogs(blogs);
-    assert.strictEqual(result, { author: "Robert C. Martin", blogs: 3 });
+    assert.deepStrictEqual(result, { author: "Robert C. Martin", blogs: 3 });
+  });
+});
+
+describe("author with most likes", () => {
+  test("when list has multiple blogs", () => {
+    const result = listHelper.mostLikes(blogs);
+    assert.deepStrictEqual(result, {
+      author: "Edsger W. Dijkstra",
+      likes: 17,
+    });
   });
 });
