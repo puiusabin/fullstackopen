@@ -87,7 +87,7 @@ describe("favorite blog", () => {
     assert.strictEqual(result, null);
   });
 
-  test("when a list has multiple blogs", () => {
+  test("when list has multiple blogs", () => {
     const result = listHelper.favoriteBlog(blogs);
     assert.deepStrictEqual(result, {
       _id: "5a422b3a1b54a676234d17f9",
@@ -97,5 +97,12 @@ describe("favorite blog", () => {
       likes: 12,
       __v: 0,
     });
+  });
+});
+
+describe("author with most blogs", () => {
+  test("when list has multiple blogs", () => {
+    const result = listHelper.mostBlogs(blogs);
+    assert.strictEqual(result, "Robert C. Martin");
   });
 });

@@ -15,4 +15,24 @@ const favoriteBlog = (blogs) => {
   );
 };
 
-module.exports = { dummy, totalLikes, favoriteBlog };
+const mostBlogs = (blogs) => {
+  if (!blogs?.length) return null;
+
+  const counts = new Map();
+  let topAuthor = null;
+  let maxCount = 0;
+
+  for (const { author } of blogs) {
+    const count = (counts.get(author) ?? 0) + 1;
+    counts.set(author, count);
+
+    if (count > maxCount) {
+      maxCount = count;
+      topAuthor = author;
+    }
+  }
+
+  return topAuthor;
+};
+
+module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs };
