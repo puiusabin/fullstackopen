@@ -103,6 +103,6 @@ describe("favorite blog", () => {
 describe("author with most blogs", () => {
   test("when list has multiple blogs", () => {
     const result = listHelper.mostBlogs(blogs);
-    assert.strictEqual(result, "Robert C. Martin");
+    assert.strictEqual(result, { author: "Robert C. Martin", blogs: 3 });
   });
 });

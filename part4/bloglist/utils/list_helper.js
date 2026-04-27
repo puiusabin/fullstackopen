@@ -16,8 +16,6 @@ const favoriteBlog = (blogs) => {
 };
 
 const mostBlogs = (blogs) => {
-  if (!blogs?.length) return null;
-
   const counts = new Map();
   let topAuthor = null;
   let maxCount = 0;
@@ -32,7 +30,7 @@ const mostBlogs = (blogs) => {
     }
   }
 
-  return topAuthor;
+  return { author: topAuthor, blogs: maxCount };
 };
 
 module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs };
