@@ -30,6 +30,26 @@ test("id instead of _id", async () => {
   assert(response.body[0].id);
 });
 
+test("new blogs post is created", async () => {
+  const newBlog = {
+    title: "New blog",
+    author: "Sabin Puiu",
+    url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/sabin.html",
+    likes: 0,
+  };
+  const response = await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+
+  const blogsAtEnd = await helper.blogsInDb();
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1);
+
+  const authors = blogsAtEnd.map((b) => b.author);
+  assert(authors.includes("Sabin Puiu"));
+});
+
 after(async () => {
   mongoose.connection.close();
 });
