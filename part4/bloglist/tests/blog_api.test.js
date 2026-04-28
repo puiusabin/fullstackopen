@@ -30,7 +30,7 @@ test("id instead of _id", async () => {
   assert(response.body[0].id);
 });
 
-test("new blogs post is created", async () => {
+test("new blog post is created", async () => {
   const newBlog = {
     title: "New blog",
     author: "Sabin Puiu",
@@ -48,6 +48,21 @@ test("new blogs post is created", async () => {
 
   const authors = blogsAtEnd.map((b) => b.author);
   assert(authors.includes("Sabin Puiu"));
+});
+
+test("if likes field is missing, likes equals to 0", async () => {
+  const newBlog = {
+    title: "New blog without likes",
+    author: "Sabin Puiu",
+    url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/sabin.html",
+  };
+  const response = await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+
+  assert.strictEqual(response.body.likes, 0);
 });
 
 after(async () => {
