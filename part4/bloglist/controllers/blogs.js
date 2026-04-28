@@ -8,11 +8,14 @@ blogsRouter.get("/", async (request, response) => {
 });
 
 blogsRouter.post("/", async (request, response) => {
+  if (!request.body.title || !request.body.url) {
+    return await response.status(400).json({ error: "Bad Request" });
+  }
   const newBlog = { ...request.body, likes: request.body.likes ?? 0 };
   const blog = new Blog(newBlog);
 
   const result = await blog.save();
-  response.status(201).json(result);
+  await response.status(201).json(result);
 });
 
 module.exports = blogsRouter;

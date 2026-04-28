@@ -65,6 +65,11 @@ test("if likes field is missing, likes equals to 0", async () => {
   assert.strictEqual(response.body.likes, 0);
 });
 
+test("post without url/title is invalid", async () => {
+  await api.post("/api/blogs").send({ title: "test" }).expect(400);
+  await api.post("/api/blogs").send({ url: "test" }).expect(400);
+});
+
 after(async () => {
   mongoose.connection.close();
 });
