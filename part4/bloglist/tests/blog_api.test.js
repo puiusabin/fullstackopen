@@ -70,6 +70,15 @@ test("post without url/title is invalid", async () => {
   await api.post("/api/blogs").send({ url: "test" }).expect(400);
 });
 
+test("blog post is deleted", async () => {
+  const blogs = await helper.blogsInDb();
+
+  await api.delete(`/api/blogs/${blogs[0].id}`).expect(204);
+
+  const blogsAtEnd = await helper.blogsInDb();
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1);
+});
+
 after(async () => {
   mongoose.connection.close();
 });
