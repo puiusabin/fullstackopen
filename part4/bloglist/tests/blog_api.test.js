@@ -79,6 +79,16 @@ test("blog post is deleted", async () => {
   assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1);
 });
 
+test.only("one like is added to the blog", async () => {
+  const blogs = await helper.blogsInDb();
+  let blog = blogs[0];
+  blog.likes++;
+
+  const response = await api.put(`/api/blogs/${blog.id}`).send(blog);
+
+  assert.strictEqual(response.body.likes, blog.likes);
+});
+
 after(async () => {
   mongoose.connection.close();
 });
