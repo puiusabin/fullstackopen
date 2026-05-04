@@ -22,7 +22,7 @@ fullstackopen/
 │   ├── phonebook/
 │   └── phonebook-frontend/
 └── part4/              # Testing Express servers, user administration
-    ├── bloglist/
+    └── bloglist/
 ```
 
 - **Part 0** — [Fundamentals of Web apps](./part0)
