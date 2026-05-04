@@ -13,9 +13,6 @@ blogsRouter.post("/", async (request, response) => {
   if (!request.body.title || !request.body.url) {
     return response.status(400).json({ error: "Bad Request" });
   }
-  if (!request.token) {
-    return response.status(401).json({ error: "invalid token" });
-  }
   const decodedToken = jwt.verify(request.token, process.env.SECRET);
   if (!decodedToken.id) {
     return response.status(401).json({ error: "token invalid" });
