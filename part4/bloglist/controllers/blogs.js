@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const middleware = require("../utils/middleware");
 const Blog = require("../models/blog");
 const User = require("../models/user");
+const { blogsInDb } = require("../tests/test_helper");
 
 blogsRouter.get("/", async (request, response) => {
   const blogs = await Blog.find({}).populate("user", { username: 1, name: 1 });
@@ -10,38 +11,48 @@ blogsRouter.get("/", async (request, response) => {
   response.json(blogs);
 });
 
-blogsRouter.post("/", middleware.userExtractor, async (request, response) => {
-  if (!request.body.title || !request.body.url) {
-    return response.status(400).json({ error: "Bad Request" });
-  }
+blogsRouter.post(
+  "/",
+  middleware.tokenExtractor,
+  middleware.userExtractor,
+  async (request, response) => {
+    if (!request.body.title || !request.body.url) {
+      return response.status(400).json({ error: "Bad Request" });
+    }
 
-  const user = request.user;
+    const user = request.user;
 
-  const newBlog = {
-    ...request.body,
-    likes: request.body.likes ?? 0,
-    user: user._id,
-  };
-  const blog = new Blog(newBlog);
+    const newBlog = {
+      ...request.body,
+      likes: request.body.likes ?? 0,
+      user: user._id,
+    };
+    const blog = new Blog(newBlog);
 
-  const savedBlog = await blog.save();
+    const savedBlog = await blog.save();
 
-  user.blogs = user.blogs.concat(savedBlog._id);
-  await user.save();
+    user.blogs = user.blogs.concat(savedBlog._id);
+    await user.save();
 
-  response.status(201).json(savedBlog);
-});
+    response.status(201).json(savedBlog);
+  },
+);
 
 blogsRouter.delete(
   "/:id",
+  middleware.tokenExtractor,
   middleware.userExtractor,
   async (request, response) => {
     const id = request.params.id;
     const user = request.user;
-    if (Blog.user.toString() !== user.id) {
+
+    const blog = await Blog.findById(id);
+    console.log(blog);
+
+    if (blog.user.toString() !== user.id) {
       return response.status(403).end();
     }
-    await Blog.findByIdAndDelete(id);
+    await blog.deleteOne();
     response.status(204).end();
   },
 );
