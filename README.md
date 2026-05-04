@@ -18,9 +18,11 @@ fullstackopen/
 │   ├── countries/
 │   ├── courseinfo/
 │   └── phonebook/
-└── part3/              # Programming a server with NodeJS and Express
-    ├── phonebook/
-    └── phonebook-frontend/
+├── part3/              # Programming a server with NodeJS and Express
+│   ├── phonebook/
+│   └── phonebook-frontend/
+└── part4/              # Testing Express servers, user administration
+    ├── bloglist/
 ```
 
 - **Part 0** — [Fundamentals of Web apps](./part0)
@@ -28,3 +30,4 @@ fullstackopen/
 - **Part 2** — [Communicating with server](./part2)
 - **Part 3** — [Programming a server with NodeJS and Express](./part3)
   - [Phonebook Deployment](https://fullstackopen-u449.onrender.com/)
+- **Part 4** — [Testing Express servers, user administration](./part4)
