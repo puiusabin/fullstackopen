@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -11,6 +12,7 @@ const App = () => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -35,7 +37,10 @@ const App = () => {
       setUsername("");
       setPassword("");
     } catch {
-      window.alert("username or password is invalid");
+      setNotification("username or password is invalid");
+      setTimeout(() => {
+        setNotification(null);
+      }, 5000);
     }
   };
 
@@ -52,8 +57,17 @@ const App = () => {
     try {
       const response = await blogService.create(newBlog);
       setBlogs(blogs.concat(response));
+      setNotification(
+        `a new blog ${response.title} by ${response.author} created`,
+      );
+      setTimeout(() => {
+        setNotification(null);
+      }, 5000);
     } catch (error) {
-      window.alert(error);
+      setNotification(error);
+      setTimeout(() => {
+        setNotification(null);
+      }, 5000);
     }
   };
 
@@ -66,6 +80,7 @@ const App = () => {
     return (
       <div>
         <h2>log in to application</h2>
+        <Notification message={notification}></Notification>
         <form onSubmit={handleLogin}>
           <div>
             <label>
@@ -95,6 +110,7 @@ const App = () => {
     return (
       <div>
         <h2>blogs</h2>
+        <Notification message={notification}></Notification>
         <div>
           {user.name} logged in{" "}
           <button onClick={() => handleLogout()}>log out</button>
