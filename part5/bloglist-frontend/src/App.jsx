@@ -64,9 +64,12 @@ const App = () => {
   };
 
   const addLike = async (blog) => {
-    blog.likes++;
-    const newBlog = await blogService.update(blog);
-    setBlogs(blogs.map((b) => (b.id === newBlog.id ? newBlog : b)));
+    const updatedBlog = {
+      ...blog,
+      likes: blog.likes + 1,
+    };
+    await blogService.update(updatedBlog);
+    setBlogs(blogs.map((b) => (b.id === updatedBlog.id ? updatedBlog : b)));
   };
 
   const handleLogout = () => {
