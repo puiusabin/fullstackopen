@@ -74,6 +74,11 @@ const App = () => {
     setBlogs(blogs.map((b) => (b.id === updatedBlog.id ? updatedBlog : b)));
   };
 
+  const removeBlog = async (blog) => {
+    await blogService.deleteBlog(blog.id);
+    setBlogs(blogs.filter((b) => b.id !== blog.id));
+  };
+
   const handleLogout = () => {
     window.localStorage.removeItem("loggedBlogListUser");
     setUser(null);
@@ -123,7 +128,12 @@ const App = () => {
         </Togglable>
         <div>
           {sortedBlogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} addLike={addLike} />
+            <Blog
+              key={blog.id}
+              blog={blog}
+              addLike={addLike}
+              removeBlog={removeBlog}
+            />
           ))}
         </div>
       </div>
