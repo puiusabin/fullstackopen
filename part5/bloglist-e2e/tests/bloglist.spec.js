@@ -116,6 +116,65 @@ describe("Blog app", () => {
           ).not.toBeVisible();
         });
       });
+
+      describe("multiple blogs exist", () => {
+        beforeEach(async ({ page }) => {
+          await page.getByRole("button", { name: "create" }).click();
+
+          await page.getByLabel("title:").fill("first blog");
+          await page.getByLabel("author:").fill("Playwright");
+          await page.getByLabel("url:").fill("http://example.com/1");
+          await page.getByRole("button", { name: "create" }).click();
+
+          await page.getByText("first blog by Playwright").waitFor();
+
+          // second blog
+          await page.getByRole("button", { name: "create" }).click();
+
+          await page.getByLabel("title:").fill("second blog");
+          await page.getByLabel("author:").fill("Playwright");
+          await page.getByLabel("url:").fill("http://example.com/2");
+          await page.getByRole("button", { name: "create" }).click();
+
+          await page.getByText("second blog by Playwright").waitFor();
+
+          // third blog
+          await page.getByRole("button", { name: "create" }).click();
+
+          await page.getByLabel("title:").fill("third blog");
+          await page.getByLabel("author:").fill("Playwright");
+          await page.getByLabel("url:").fill("http://example.com/3");
+          await page.getByRole("button", { name: "create" }).click();
+
+          await page.getByText("third blog by Playwright").waitFor();
+        });
+
+        test("blogs are ordered by number of likes", async ({ page }) => {
+          const blogs = await page.locator(".blog");
+          const titles = await blogs.allInnerTexts();
+
+          await blogs
+            .filter({ hasText: "third blog" })
+            .getByRole("button")
+            .click();
+
+          await blogs
+            .filter({ hasText: "third blog" })
+            .getByRole("button", { name: "like" })
+            .click();
+
+          await expect(page.getByText("likes 1")).toBeVisible();
+          await blogs
+            .filter({ hasText: "third blog" })
+            .getByRole("button", { name: "hide" })
+            .click();
+
+          const titlesAtEnd = await page.locator(".blog").allInnerTexts();
+
+          expect(titles[2]).toBe(titlesAtEnd[0]);
+          expect(titles).not.toBe(titlesAtEnd);
+        });
+      });
     });
   });
 });

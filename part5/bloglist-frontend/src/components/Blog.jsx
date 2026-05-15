@@ -24,7 +24,7 @@ const Blog = ({ blog, addLike, removeBlog, removeButton }) => {
   );
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className="blog">
       {blog.title} {blog.author}
       <button onClick={() => setView(!view)}>{view ? "hide" : "view"}</button>
       {view && blogDetails()}
