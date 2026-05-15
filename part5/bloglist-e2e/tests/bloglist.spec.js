@@ -62,6 +62,26 @@ describe("Blog app", () => {
           page.getByText("new blog by playwright Playwright"),
         ).toBeVisible();
       });
+
+      describe("and a blog exists", () => {
+        beforeEach(async ({ page }) => {
+          await page.getByRole("button", { name: "create" }).click();
+
+          await page.getByLabel("title:").fill("another blog by playwright");
+          await page.getByLabel("author:").fill("Playwright");
+          await page
+            .getByLabel("url:")
+            .fill("http://example.com/blog-playwright");
+          await page.getByRole("button", { name: "create" }).click();
+        });
+
+        test("blog can be liked", async ({ page }) => {
+          await page.getByRole("button", { name: "view" }).click();
+          await page.getByRole("button", { name: "like" }).click();
+
+          await expect(page.getByText("likes 1")).toBeVisible();
+        });
+      });
     });
   });
 });
