@@ -90,6 +90,31 @@ describe("Blog app", () => {
             page.getByRole("button", { name: "remove" }),
           ).not.toBeVisible();
         });
+
+        test("only the creator can delete the blog", async ({
+          page,
+          request,
+        }) => {
+          await request.post("http://localhost:3003/api/users", {
+            data: {
+              username: "otheruser",
+              name: "Other User",
+              password: "otherpassword",
+            },
+          });
+
+          await page.getByRole("button", { name: "log out" }).click();
+
+          await page.getByLabel("username").fill("otheruser");
+          await page.getByLabel("password").fill("otherpassword");
+          await page.getByRole("button", { name: "login" }).click();
+
+          await page.getByRole("button", { name: "view" }).click();
+
+          await expect(
+            page.getByRole("button", { name: "remove" }),
+          ).not.toBeVisible();
+        });
       });
     });
   });

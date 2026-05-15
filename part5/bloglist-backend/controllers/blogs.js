@@ -47,7 +47,6 @@ blogsRouter.delete(
     const user = request.user;
 
     const blog = await Blog.findById(id);
-    console.log(blog);
 
     if (blog.user.toString() !== user.id) {
       return response.status(403).end();

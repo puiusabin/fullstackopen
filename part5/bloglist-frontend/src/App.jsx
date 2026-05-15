@@ -133,6 +133,7 @@ const App = () => {
               blog={blog}
               addLike={addLike}
               removeBlog={removeBlog}
+              removeButton={blog.user.toString() === user.id}
             />
           ))}
         </div>
