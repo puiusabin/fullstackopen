@@ -1,8 +1,6 @@
-import { useState } from "react";
+import { useState, useParams, useNavigate } from "react";
 
-const Blog = ({ blog, addLike, removeBlog, removeButton }) => {
-  const [view, setView] = useState(false);
-
+const Blog = ({ blog, addLike, removeBlog, user }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -10,24 +8,27 @@ const Blog = ({ blog, addLike, removeBlog, removeButton }) => {
     borderWidth: 1,
     marginBottom: 5,
   };
-
-  const blogDetails = () => (
-    <div>
-      {blog.url}
-      <br />
-      likes {blog.likes} <button onClick={() => addLike(blog)}>like</button>
-      <br />
-      {blog.user.name}
-      <br />
-      {removeButton && <button onClick={() => removeBlog(blog)}>remove</button>}
-    </div>
-  );
+  if (!blog) {
+    return null;
+  }
 
   return (
-    <div style={blogStyle} className="blog">
-      {blog.title} {blog.author}
-      <button onClick={() => setView(!view)}>{view ? "hide" : "view"}</button>
-      {view && blogDetails()}
+    <div className="blog">
+      <h2>
+        {blog.title} {blog.author}
+      </h2>
+      <div>
+        <a href={blog.url}>{blog.url}</a>
+        <br />
+        likes {blog.likes}{" "}
+        {user && <button onClick={() => addLike(blog)}>like</button>}
+        <br />
+        {blog.user.name}
+        <br />
+        {user && user.id === blog.user.id && (
+          <button onClick={() => removeBlog(blog)}>remove</button>
+        )}
+      </div>
     </div>
   );
 };

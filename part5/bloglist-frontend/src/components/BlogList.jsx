@@ -5,6 +5,7 @@ import loginService from "../services/login";
 import Notification from "./Notification";
 import BlogForm from "./BlogForm";
 import Togglable from "./Togglable";
+import { Link } from "react-router-dom";
 
 const BlogList = ({ user }) => {
   const [blogs, setBlogs] = useState([]);
@@ -58,15 +59,15 @@ const BlogList = ({ user }) => {
         <BlogForm createBlog={addBlog} />
       </Togglable>
       <div>
-        {sortedBlogs.map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            addLike={addLike}
-            removeBlog={removeBlog}
-            removeButton={user ? blog.user.toString() === user.id : false}
-          />
-        ))}
+        <ul>
+          {sortedBlogs.map((blog) => (
+            <li key={blog.id}>
+              <Link to={`/blogs/${blog.id}`} key={blog.id}>
+                {blog.title}
+              </Link>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

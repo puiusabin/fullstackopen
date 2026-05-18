@@ -1,15 +1,26 @@
 import { useEffect, useState } from "react";
-import { Link, BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  Link,
+  Routes, // ✅ removed BrowserRouter as Router
+  Route,
+  useMatch,
+} from "react-router-dom";
+import Blog from "./components/Blog";
 import BlogList from "./components/BlogList";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 import LoginForm from "./components/LoginForm";
 
 const App = () => {
+  const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
   const padding = {
     padding: 5,
   };
+
+  useEffect(() => {
+    blogService.getAll().then((blogs) => setBlogs(blogs));
+  }, []);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogListUser");
@@ -31,8 +42,25 @@ const App = () => {
     window.localStorage.removeItem("loggedBlogListUser");
     setUser(null);
   };
+
+  const match = useMatch("/blogs/:id");
+  const blog = match ? blogs.find((blog) => blog.id === match.params.id) : null;
+
+  const addLike = async (blog) => {
+    const updatedBlog = {
+      ...blog,
+      likes: blog.likes + 1,
+    };
+    await blogService.update(updatedBlog);
+    setBlogs(blogs.map((b) => (b.id === updatedBlog.id ? updatedBlog : b)));
+  };
+
+  const removeBlog = async (blog) => {
+    await blogService.deleteBlog(blog.id);
+    setBlogs(blogs.filter((b) => b.id !== blog.id));
+  };
   return (
-    <Router>
+    <div>
       <div>
         <Link style={padding} to="/">
           blogs
@@ -47,10 +75,21 @@ const App = () => {
       </div>
 
       <Routes>
+        <Route
+          path="/blogs/:id"
+          element={
+            <Blog
+              blog={blog}
+              addLike={addLike}
+              removeBlog={removeBlog}
+              user={user}
+            />
+          }
+        />
         <Route path="/" element={<BlogList user={user} />} />
         <Route path="/login" element={<LoginForm login={login} />} />
       </Routes>
-    </Router>
+    </div>
   );
 };
 
