@@ -1,15 +1,11 @@
 import { useEffect, useState } from "react";
-import {
-  Link,
-  Routes, // ✅ removed BrowserRouter as Router
-  Route,
-  useMatch,
-} from "react-router-dom";
+import { Link, Routes, Route, useMatch, useNavigate } from "react-router-dom";
 import Blog from "./components/Blog";
 import BlogList from "./components/BlogList";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 import LoginForm from "./components/LoginForm";
+import BlogForm from "./components/BlogForm";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -17,6 +13,7 @@ const App = () => {
   const padding = {
     padding: 5,
   };
+  const navigate = useNavigate();
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -58,6 +55,17 @@ const App = () => {
   const removeBlog = async (blog) => {
     await blogService.deleteBlog(blog.id);
     setBlogs(blogs.filter((b) => b.id !== blog.id));
+    navigate("/");
+  };
+
+  const addBlog = async (newBlog) => {
+    try {
+      const response = await blogService.create(newBlog);
+      setBlogs(blogs.concat(response));
+      navigate("/");
+    } catch (error) {
+      window.alert(error);
+    }
   };
   return (
     <div>
@@ -65,6 +73,11 @@ const App = () => {
         <Link style={padding} to="/">
           blogs
         </Link>
+        {user && (
+          <Link style={padding} to="/create">
+            new blog
+          </Link>
+        )}
         {user ? (
           <button onClick={handleLogout}>logout</button>
         ) : (
@@ -87,6 +100,7 @@ const App = () => {
           }
         />
         <Route path="/" element={<BlogList user={user} />} />
+        <Route path="create" element={<BlogForm createBlog={addBlog} />} />
         <Route path="/login" element={<LoginForm login={login} />} />
       </Routes>
     </div>

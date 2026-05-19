@@ -37,20 +37,6 @@ const BlogList = ({ user }) => {
     }
   };
 
-  const addLike = async (blog) => {
-    const updatedBlog = {
-      ...blog,
-      likes: blog.likes + 1,
-    };
-    await blogService.update(updatedBlog);
-    setBlogs(blogs.map((b) => (b.id === updatedBlog.id ? updatedBlog : b)));
-  };
-
-  const removeBlog = async (blog) => {
-    await blogService.deleteBlog(blog.id);
-    setBlogs(blogs.filter((b) => b.id !== blog.id));
-  };
-
   return (
     <div>
       <h2>blogs</h2>
