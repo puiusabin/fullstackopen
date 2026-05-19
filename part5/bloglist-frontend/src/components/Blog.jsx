@@ -1,13 +1,6 @@
 import { useState, useParams, useNavigate } from "react";
 
 const Blog = ({ blog, addLike, removeBlog, user }) => {
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: "solid",
-    borderWidth: 1,
-    marginBottom: 5,
-  };
   if (!blog) {
     return null;
   }
@@ -20,7 +13,7 @@ const Blog = ({ blog, addLike, removeBlog, user }) => {
       <div>
         <a href={blog.url}>{blog.url}</a>
         <br />
-        likes {blog.likes}{" "}
+        <span>likes {blog.likes}</span>
         {user && <button onClick={() => addLike(blog)}>like</button>}
         <br />
         {blog.user.name}
