@@ -4,7 +4,6 @@ const Blog = ({ blog, addLike, removeBlog, user }) => {
   if (!blog) {
     return null;
   }
-
   return (
     <div className="blog">
       <h2>
@@ -18,7 +17,7 @@ const Blog = ({ blog, addLike, removeBlog, user }) => {
         <br />
         {blog.user.name}
         <br />
-        {user && user.id === blog.user.id && (
+        {user && user.id === blog.user && (
           <button onClick={() => removeBlog(blog)}>remove</button>
         )}
       </div>
