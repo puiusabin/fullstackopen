@@ -6,7 +6,7 @@ import blogService from "./services/blogs";
 import loginService from "./services/login";
 import LoginForm from "./components/LoginForm";
 import BlogForm from "./components/BlogForm";
-import { Container } from "@mui/material";
+import { Container, AppBar, Toolbar, Button, Typography } from "@mui/material";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -71,23 +71,31 @@ const App = () => {
   return (
     <Container>
       <div>
-        <div>
-          <Link style={padding} to="/">
-            blogs
-          </Link>
-          {user && (
-            <Link style={padding} to="/create">
-              new blog
-            </Link>
-          )}
-          {user ? (
-            <button onClick={handleLogout}>logout</button>
-          ) : (
-            <Link style={padding} to="login">
-              login
-            </Link>
-          )}
-        </div>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              blog app
+            </Typography>
+            <Button color="inherit" component={Link} to="/">
+              blogs
+            </Button>
+            {user ? (
+              <div>
+                {" "}
+                <Button color="inherit" component={Link} to="/create">
+                  new blog
+                </Button>
+                <Button color="inherit" onClick={handleLogout}>
+                  logout
+                </Button>{" "}
+              </div>
+            ) : (
+              <Button color="inherit" component={Link} to="/login">
+                login
+              </Button>
+            )}
+          </Toolbar>
+        </AppBar>
 
         <Routes>
           <Route
@@ -102,7 +110,7 @@ const App = () => {
             }
           />
           <Route path="/" element={<BlogList user={user} />} />
-          <Route path="create" element={<BlogForm createBlog={addBlog} />} />
+          <Route path="/create" element={<BlogForm createBlog={addBlog} />} />
           <Route path="/login" element={<LoginForm login={login} />} />
         </Routes>
       </div>

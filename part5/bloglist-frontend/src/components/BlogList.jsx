@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 const BlogList = ({ user }) => {
   const [blogs, setBlogs] = useState([]);
   const [notification, setNotification] = useState(null);
+  const [severity, setSeverity] = useState(null);
   const blogFormRef = useRef();
 
   const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes);
@@ -23,15 +24,19 @@ const BlogList = ({ user }) => {
       blogFormRef.current.toggleVisibility();
       const response = await blogService.create(newBlog);
       setBlogs(blogs.concat(response));
+      setSeverity("success");
       setNotification(
         `a new blog ${response.title} by ${response.author} created`,
       );
       setTimeout(() => {
+        setSeverity(null);
         setNotification(null);
       }, 5000);
     } catch (error) {
+      setSeverity("error");
       setNotification(error);
       setTimeout(() => {
+        setSeverity(null);
         setNotification(null);
       }, 5000);
     }

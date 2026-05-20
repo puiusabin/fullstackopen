@@ -7,6 +7,7 @@ const LoginForm = ({ login }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [notification, setNotification] = useState(null);
+  const [severity, setSeverity] = useState(null);
   const navigate = useNavigate();
 
   const handleLogin = async (event) => {
@@ -18,8 +19,10 @@ const LoginForm = ({ login }) => {
       setPassword("");
       navigate("/");
     } catch {
+      setSeverity("error");
       setNotification("username or password is invalid");
       setTimeout(() => {
+        setSeverity(null);
         setNotification(null);
       }, 5000);
     }
@@ -28,10 +31,11 @@ const LoginForm = ({ login }) => {
   return (
     <div>
       <h2>log in to application</h2>
-      <Notification message={notification}></Notification>
+      <Notification message={notification} severity={severity}></Notification>
       <form onSubmit={handleLogin}>
         <div>
           <TextField
+            variant="standard"
             label="username"
             type="text"
             value={username}
@@ -40,6 +44,7 @@ const LoginForm = ({ login }) => {
         </div>
         <div style={{ marginTop: "1rem" }}>
           <TextField
+            variant="standard"
             label="password"
             type="password"
             value={password}
