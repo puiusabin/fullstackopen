@@ -6,6 +6,7 @@ import blogService from "./services/blogs";
 import loginService from "./services/login";
 import LoginForm from "./components/LoginForm";
 import BlogForm from "./components/BlogForm";
+import { Container } from "@mui/material";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -68,42 +69,44 @@ const App = () => {
     }
   };
   return (
-    <div>
+    <Container>
       <div>
-        <Link style={padding} to="/">
-          blogs
-        </Link>
-        {user && (
-          <Link style={padding} to="/create">
-            new blog
+        <div>
+          <Link style={padding} to="/">
+            blogs
           </Link>
-        )}
-        {user ? (
-          <button onClick={handleLogout}>logout</button>
-        ) : (
-          <Link style={padding} to="login">
-            login
-          </Link>
-        )}
-      </div>
+          {user && (
+            <Link style={padding} to="/create">
+              new blog
+            </Link>
+          )}
+          {user ? (
+            <button onClick={handleLogout}>logout</button>
+          ) : (
+            <Link style={padding} to="login">
+              login
+            </Link>
+          )}
+        </div>
 
-      <Routes>
-        <Route
-          path="/blogs/:id"
-          element={
-            <Blog
-              blog={blog}
-              addLike={addLike}
-              removeBlog={removeBlog}
-              user={user}
-            />
-          }
-        />
-        <Route path="/" element={<BlogList user={user} />} />
-        <Route path="create" element={<BlogForm createBlog={addBlog} />} />
-        <Route path="/login" element={<LoginForm login={login} />} />
-      </Routes>
-    </div>
+        <Routes>
+          <Route
+            path="/blogs/:id"
+            element={
+              <Blog
+                blog={blog}
+                addLike={addLike}
+                removeBlog={removeBlog}
+                user={user}
+              />
+            }
+          />
+          <Route path="/" element={<BlogList user={user} />} />
+          <Route path="create" element={<BlogForm createBlog={addBlog} />} />
+          <Route path="/login" element={<LoginForm login={login} />} />
+        </Routes>
+      </div>
+    </Container>
   );
 };
 
