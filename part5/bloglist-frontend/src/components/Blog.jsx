@@ -1,27 +1,47 @@
-import { useState, useParams, useNavigate } from "react";
+import { Card, CardContent, Typography, Link, Button } from "@mui/material";
 
 const Blog = ({ blog, addLike, removeBlog, user }) => {
   if (!blog) {
     return null;
   }
   return (
-    <div className="blog">
-      <h2>
-        {blog.title} {blog.author}
-      </h2>
-      <div>
-        <a href={blog.url}>{blog.url}</a>
-        <br />
-        <span>likes {blog.likes}</span>
-        {user && <button onClick={() => addLike(blog)}>like</button>}
-        <br />
-        {blog.user.name}
-        <br />
-        {user && user.id === blog.user && (
-          <button onClick={() => removeBlog(blog)}>remove</button>
-        )}
-      </div>
-    </div>
+    <Card>
+      <CardContent>
+        <Typography variant="h5" component="div">
+          {blog.title}
+        </Typography>
+        <Typography
+          sx={{ color: "text.secondary", mb: 1.5 }}
+          variant="subtitle1"
+        >
+          by {blog.author}
+        </Typography>
+        <Link href={blog.url}>{blog.url}</Link>
+        <Typography
+          sx={{ color: "text.secondary", mb: 1.5 }}
+          variant="subtitle2"
+        >
+          Added by {blog.user.name}
+        </Typography>
+        <Typography variant="body1">
+          {blog.likes} likes{" "}
+          {user && (
+            <Button onClick={() => addLike(blog)} variant="outlined">
+              like
+            </Button>
+          )}
+          {user && user.id === blog.user && (
+            <Button
+              onClick={() => removeBlog(blog)}
+              variant="outline"
+              color="error"
+            >
+              remove
+            </Button>
+          )}
+        </Typography>
+      </CardContent>
+    </Card>
   );
 };
 
