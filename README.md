@@ -21,8 +21,12 @@ fullstackopen/
 ├── part3/              # Programming a server with NodeJS and Express
 │   ├── phonebook/
 │   └── phonebook-frontend/
-└── part4/              # Testing Express servers, user administration
-    └── bloglist/
+├── part4/              # Testing Express servers, user administration
+│   └── bloglist/
+└── part5/              # Testing React apps, React Router
+    ├── bloglist-frontend/
+    ├── bloglist-backend/
+    └── bloglist-e2e/
 ```
 
 - **Part 0** — [Fundamentals of Web apps](./part0)
@@ -31,3 +35,4 @@ fullstackopen/
 - **Part 3** — [Programming a server with NodeJS and Express](./part3)
   - [Phonebook Deployment](https://fullstackopen-u449.onrender.com/)
 - **Part 4** — [Testing Express servers, user administration](./part4)
+- **Part 5** — [Testing React apps, React Router](./part5)
