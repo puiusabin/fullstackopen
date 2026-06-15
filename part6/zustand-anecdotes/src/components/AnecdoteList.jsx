@@ -4,9 +4,10 @@ const AnecdoteList = () => {
   const anecdotes = useAnecdotes();
   const { addVote } = useAnecdoteActions();
 
+  const sortedAnecdotes = anecdotes.toSorted((a, b) => b.votes - a.votes);
   return (
     <div>
-      {anecdotes.map((anecdote) => (
+      {sortedAnecdotes.map((anecdote) => (
         <div key={anecdote.id}>
           <div>{anecdote.content}</div>
           <div>
