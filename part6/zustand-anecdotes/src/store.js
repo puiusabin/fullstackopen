@@ -13,7 +13,6 @@ const useAnecdoteStore = create((set, get) => ({
     },
     addVote: async (id) => {
       const anecdote = get().anecdotes.find((a) => a.id === id);
-      console.log(anecdote);
 
       const updated = await anecdoteService.update(id, {
         ...anecdote,
@@ -32,7 +31,28 @@ const useAnecdoteStore = create((set, get) => ({
   },
 }));
 
+const useNotificationStore = create((set) => ({
+  visible: false,
+  message: "",
+  actions: {
+    setVisibility: (value) =>
+      set(() => ({
+        visible: value,
+      })),
+    setMessage: (message) =>
+      set(() => ({
+        message,
+      })),
+  },
+}));
+
 export const useAnecdotes = () => useAnecdoteStore((state) => state.anecdotes);
 export const useFilter = () => useAnecdoteStore((state) => state.filter);
 export const useAnecdoteActions = () =>
   useAnecdoteStore((state) => state.actions);
+export const useNotification = () => ({
+  visible: useNotificationStore((state) => state.visible),
+  message: useNotificationStore((state) => state.message),
+});
+export const useNotificationActions = () =>
+  useNotificationStore((state) => state.actions);

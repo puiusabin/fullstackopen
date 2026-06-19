@@ -1,12 +1,18 @@
-import { useAnecdoteActions } from "../store";
+import { useAnecdoteActions, useNotificationActions } from "../store";
 
 const AnecdoteForm = () => {
   const { add } = useAnecdoteActions();
+  const { setMessage, setVisibility } = useNotificationActions();
 
   const addAnecdote = (e) => {
     e.preventDefault();
     const content = e.target.anecdote.value;
     add(content);
+    setMessage(`You crated a new anecdote ${content}`);
+    setVisibility(true);
+    setTimeout(() => {
+      setVisibility(false);
+    }, 5000);
     e.target.reset();
   };
 
