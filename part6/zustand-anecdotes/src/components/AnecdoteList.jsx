@@ -8,7 +8,7 @@ import {
 const AnecdoteList = () => {
   const anecdotes = useAnecdotes();
   const filter = useFilter();
-  const { addVote } = useAnecdoteActions();
+  const { addVote, deleteOne } = useAnecdoteActions();
   const { setVisibility, setMessage } = useNotificationActions();
 
   const anecdotesToShow = anecdotes
@@ -34,6 +34,9 @@ const AnecdoteList = () => {
           <div>
             has {anecdote.votes}
             <button onClick={() => handleVote(anecdote)}>vote</button>
+            {anecdote.votes === 0 && (
+              <button onClick={() => deleteOne(anecdote.id)}>delete</button>
+            )}
           </div>
         </div>
       ))}
