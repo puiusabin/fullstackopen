@@ -79,4 +79,22 @@ describe("anecdotes", () => {
     expect(result.current).toHaveLength(1);
     expect(result.current[0].content).toBe("test2");
   });
+
+  it("voting increases the number of votes for an anecdote", async () => {
+    const anecdotes = [{ id: 1, votes: 0, content: "test" }];
+    useAnecdoteStore.setState({ anecdotes: anecdotes });
+    anecdoteService.update.mockResolvedValue({
+      ...anecdotes[0],
+      votes: anecdotes[0].votes + 1,
+    });
+
+    const { result } = renderHook(() => useAnecdoteActions());
+
+    await act(() => {
+      result.current.addVote(anecdotes[0].id);
+    });
+
+    const { result: anecdoteResult } = renderHook(() => useAnecdotes());
+    expect(anecdoteResult.current[0].votes).toEqual(1);
+  });
 });
