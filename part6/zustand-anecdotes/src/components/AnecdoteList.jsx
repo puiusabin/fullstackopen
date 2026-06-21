@@ -11,11 +11,9 @@ const AnecdoteList = () => {
   const { addVote, deleteOne } = useAnecdoteActions();
   const { setVisibility, setMessage } = useNotificationActions();
 
-  const anecdotesToShow = anecdotes
-    .filter((anecdote) =>
-      anecdote.content.toLowerCase().includes(filter.toLowerCase()),
-    )
-    .toSorted((a, b) => b.votes - a.votes);
+  const anecdotesToShow = anecdotes.filter((anecdote) =>
+    anecdote.content.toLowerCase().includes(filter.toLowerCase()),
+  );
 
   const handleVote = (anecdote) => {
     addVote(anecdote.id);
