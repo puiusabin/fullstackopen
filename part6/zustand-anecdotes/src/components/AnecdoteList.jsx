@@ -1,7 +1,6 @@
 import {
   useAnecdotes,
   useAnecdoteActions,
-  useFilter,
   useNotificationActions,
 } from "../store";
 
