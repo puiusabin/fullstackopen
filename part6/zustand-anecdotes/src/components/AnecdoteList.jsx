@@ -7,13 +7,8 @@ import {
 
 const AnecdoteList = () => {
   const anecdotes = useAnecdotes();
-  const filter = useFilter();
   const { addVote, deleteOne } = useAnecdoteActions();
   const { setVisibility, setMessage } = useNotificationActions();
-
-  const anecdotesToShow = anecdotes.filter((anecdote) =>
-    anecdote.content.toLowerCase().includes(filter.toLowerCase()),
-  );
 
   const handleVote = (anecdote) => {
     addVote(anecdote.id);
@@ -26,7 +21,7 @@ const AnecdoteList = () => {
 
   return (
     <div>
-      {anecdotesToShow.map((anecdote) => (
+      {anecdotes.map((anecdote) => (
         <div key={anecdote.id}>
           <div>{anecdote.content}</div>
           <div>

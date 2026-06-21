@@ -22,7 +22,7 @@ beforeEach(() => {
   vi.clearAllMocks();
 });
 
-describe("useAnecdoteActions", () => {
+describe("anecdotes", () => {
   it("initialize loads anecdotes from service", async () => {
     const mockAnecdotes = [{ id: 1, votes: 0, content: "Test" }];
     anecdoteService.getAll.mockResolvedValue(mockAnecdotes);
@@ -52,5 +52,31 @@ describe("useAnecdoteActions", () => {
     expect(result.current[0].content).toEqual("top");
     expect(result.current[1].content).toEqual("middle");
     expect(result.current[2].content).toEqual("bottom");
+  });
+
+  it("anecdotes are filtered", async () => {
+    const anecdotes = [
+      { id: 1, votes: 0, content: "test1" },
+      { id: 2, votes: 0, content: "test12" },
+      { id: 3, votes: 0, content: "test2" },
+    ];
+    useAnecdoteStore.setState({ anecdotes, filter: "" });
+
+    const { result } = renderHook(() => useAnecdotes());
+    expect(result.current).toHaveLength(3);
+
+    act(() => {
+      useAnecdoteStore.setState({ filter: "1" });
+    });
+
+    expect(result.current).toHaveLength(2);
+    expect(result.current.map((a) => a.content)).toEqual(["test1", "test12"]);
+
+    act(() => {
+      useAnecdoteStore.setState({ filter: "test2" });
+    });
+
+    expect(result.current).toHaveLength(1);
+    expect(result.current[0].content).toBe("test2");
   });
 });
