@@ -8,7 +8,6 @@ const AnecdoteForm = () => {
     const content = event.target.anecdote.value;
     event.target.reset();
     addAnecdote(content);
-    console.log("new anecdote");
   };
 
   return (
