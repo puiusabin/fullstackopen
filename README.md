@@ -23,10 +23,14 @@ fullstackopen/
 │   └── phonebook-frontend/
 ├── part4/              # Testing Express servers, user administration
 │   └── bloglist/
-└── part5/              # Testing React apps, React Router
-    ├── bloglist-frontend/
-    ├── bloglist-backend/
-    └── bloglist-e2e/
+├── part5/              # Testing React apps, React Router
+│   ├── bloglist-frontend/
+│   ├── bloglist-backend/
+│   └── bloglist-e2e/
+└── part6/              # Advanced state management
+    ├── query-anecdotes/
+    ├── unicafe-zustand/
+    └── zustand-anecdotes/
 ```
 
 - **Part 0** — [Fundamentals of Web apps](./part0)
@@ -36,3 +40,4 @@ fullstackopen/
   - [Phonebook Deployment](https://fullstackopen-u449.onrender.com/)
 - **Part 4** — [Testing Express servers, user administration](./part4)
 - **Part 5** — [Testing React apps, React Router](./part5)
+- **Part 6** - [Advanced state management](./part6)
