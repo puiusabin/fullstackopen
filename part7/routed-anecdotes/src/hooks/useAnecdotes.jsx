@@ -1,22 +1,6 @@
-import { useState } from "react";
-import anecdoteService from "../services/anecdotes";
-import { useEffect } from "react";
+import { useContext } from "react";
+import AnecdoteContext from "../AnecdoteContext";
 
-export const useAnecdotes = () => {
-  const [anecdotes, setAnecdotes] = useState([]);
+const useAnecdotes = () => useContext(AnecdoteContext);
 
-  useEffect(() => {
-    anecdoteService.getAll().then((data) => setAnecdotes(data));
-  }, []);
-
-  const addAnecdote = async (newAnecdote) => {
-    const anecdote = await anecdoteService.createNew(newAnecdote);
-    setAnecdotes(anecdotes.concat(anecdote));
-  };
-
-  return {
-    anecdotes,
-    setAnecdotes,
-    addAnecdote,
-  };
-};
+export default useAnecdotes;
