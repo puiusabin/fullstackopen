@@ -8,9 +8,11 @@ export const useField = (type) => {
   };
 
   return {
-    type,
-    value,
-    onChange,
+    props: {
+      type,
+      value,
+      onChange,
+    },
     reset: () => setValue(""),
   };
 };
