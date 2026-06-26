@@ -8,7 +8,7 @@ const AnecdoteForm = () => {
     e.preventDefault();
     const content = e.target.anecdote.value;
     add(content);
-    setMessage(`You crated a new anecdote ${content}`);
+    setMessage(`You crated a new anecdotee ${content}`);
     setVisibility(true);
     setTimeout(() => {
       setVisibility(false);
