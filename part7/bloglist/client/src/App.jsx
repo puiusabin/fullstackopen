@@ -7,6 +7,7 @@ import loginService from "./services/login";
 import LoginForm from "./components/LoginForm";
 import BlogForm from "./components/BlogForm";
 import { Container, AppBar, Toolbar, Button, Typography } from "@mui/material";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -97,22 +98,24 @@ const App = () => {
           </Toolbar>
         </AppBar>
 
-        <Routes>
-          <Route
-            path="/blogs/:id"
-            element={
-              <Blog
-                blog={blog}
-                addLike={addLike}
-                removeBlog={removeBlog}
-                user={user}
-              />
-            }
-          />
-          <Route path="/" element={<BlogList user={user} />} />
-          <Route path="/create" element={<BlogForm createBlog={addBlog} />} />
-          <Route path="/login" element={<LoginForm login={login} />} />
-        </Routes>
+        <ErrorBoundary>
+          <Routes>
+            <Route
+              path="/blogs/:id"
+              element={
+                <Blog
+                  blog={blog}
+                  addLike={addLike}
+                  removeBlog={removeBlog}
+                  user={user}
+                />
+              }
+            />
+            <Route path="/" element={<BlogList user={user} />} />
+            <Route path="/create" element={<BlogForm createBlog={addBlog} />} />
+            <Route path="/login" element={<LoginForm login={login} />} />
+          </Routes>
+        </ErrorBoundary>
       </div>
     </Container>
   );
