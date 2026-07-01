@@ -69,6 +69,7 @@ const App = () => {
       window.alert(error);
     }
   };
+
   return (
     <Container>
       <div>
@@ -114,6 +115,7 @@ const App = () => {
             <Route path="/" element={<BlogList user={user} />} />
             <Route path="/create" element={<BlogForm createBlog={addBlog} />} />
             <Route path="/login" element={<LoginForm login={login} />} />
+            <Route path="*" element={<h1>404 - Page not found</h1>} />
           </Routes>
         </ErrorBoundary>
       </div>
