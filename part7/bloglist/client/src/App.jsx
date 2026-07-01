@@ -12,9 +12,6 @@ import ErrorBoundary from "./components/ErrorBoundary";
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
-  const padding = {
-    padding: 5,
-  };
   const navigate = useNavigate();
 
   useEffect(() => {
