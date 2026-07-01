@@ -8,11 +8,14 @@ import LoginForm from "./components/LoginForm";
 import BlogForm from "./components/BlogForm";
 import { Container, AppBar, Toolbar, Button, Typography } from "@mui/material";
 import ErrorBoundary from "./components/ErrorBoundary";
+import Notification from "./components/Notification";
+import useNotify from "./hooks/useNotify";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
+  const { notify } = useNotify();
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -63,7 +66,7 @@ const App = () => {
       setBlogs(blogs.concat(response));
       navigate("/");
     } catch (error) {
-      window.alert(error);
+      notify(error, "error");
     }
   };
 
@@ -95,6 +98,8 @@ const App = () => {
             )}
           </Toolbar>
         </AppBar>
+
+        <Notification />
 
         <ErrorBoundary>
           <Routes>

@@ -1,14 +1,13 @@
 import { useState } from "react";
-import Notification from "./Notification";
 import { useNavigate } from "react-router-dom";
 import { Button, TextField } from "@mui/material";
+import useNotify from "../hooks/useNotify";
 
 const LoginForm = ({ login }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [notification, setNotification] = useState(null);
-  const [severity, setSeverity] = useState(null);
   const navigate = useNavigate();
+  const { notify } = useNotify();
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -19,19 +18,13 @@ const LoginForm = ({ login }) => {
       setPassword("");
       navigate("/");
     } catch {
-      setSeverity("error");
-      setNotification("username or password is invalid");
-      setTimeout(() => {
-        setSeverity(null);
-        setNotification(null);
-      }, 5000);
+      notify("username or password is invalid", "error");
     }
   };
 
   return (
     <div>
       <h2>log in to application</h2>
-      <Notification message={notification} severity={severity}></Notification>
       <form onSubmit={handleLogin}>
         <div>
           <TextField

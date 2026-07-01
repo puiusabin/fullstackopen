@@ -1,10 +1,11 @@
 import Alert from "@mui/material/Alert";
+import useNotify from "../hooks/useNotify";
 
-const Notification = ({ message, severity }) => {
-  if (message === null) return null;
-  console.log(severity);
+const Notification = () => {
+  const { notification } = useNotify();
+  if (notification.message === null) return null;
 
-  return <Alert severity={severity ?? "success"}>{message}</Alert>;
+  return <Alert severity={notification.severity}>{notification.message}</Alert>;
 };
 
 export default Notification;

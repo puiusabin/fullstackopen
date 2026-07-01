@@ -1,16 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 import Blog from "./Blog";
 import blogService from "../services/blogs";
-import loginService from "../services/login";
 import Notification from "./Notification";
 import BlogForm from "./BlogForm";
 import Togglable from "./Togglable";
 import { Link } from "react-router-dom";
+import useNotify from "../hooks/useNotify";
 
-const BlogList = ({ user }) => {
+const BlogList = () => {
   const [blogs, setBlogs] = useState([]);
-  const [notification, setNotification] = useState(null);
-  const [severity, setSeverity] = useState(null);
+  const { notify } = useNotify();
   const blogFormRef = useRef();
 
   const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes);
@@ -24,28 +23,18 @@ const BlogList = ({ user }) => {
       blogFormRef.current.toggleVisibility();
       const response = await blogService.create(newBlog);
       setBlogs(blogs.concat(response));
-      setSeverity("success");
-      setNotification(
+      notify(
         `a new blog ${response.title} by ${response.author} created`,
+        "success",
       );
-      setTimeout(() => {
-        setSeverity(null);
-        setNotification(null);
-      }, 5000);
     } catch (error) {
-      setSeverity("error");
-      setNotification(error);
-      setTimeout(() => {
-        setSeverity(null);
-        setNotification(null);
-      }, 5000);
+      notify(error, "error");
     }
   };
 
   return (
     <div>
       <h2>blogs</h2>
-      <Notification message={notification}></Notification>
       <Togglable buttonLabel="create" ref={blogFormRef}>
         <BlogForm createBlog={addBlog} />
       </Togglable>
