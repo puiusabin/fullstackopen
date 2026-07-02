@@ -30,7 +30,7 @@ const Blog = ({ blog, addLike, removeBlog, user }) => {
               like
             </Button>
           )}
-          {user && user.id === blog.user && (
+          {user && user.id === blog.user.id && (
             <Button
               onClick={() => removeBlog(blog)}
               variant="outline"

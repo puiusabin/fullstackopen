@@ -1,25 +1,47 @@
 import { useEffect, useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Container, AppBar, Toolbar, Button, Typography } from "@mui/material";
 import { Link, Routes, Route, useMatch, useNavigate } from "react-router-dom";
 import Blog from "./components/Blog";
+import BlogForm from "./components/BlogForm";
 import BlogList from "./components/BlogList";
+import ErrorBoundary from "./components/ErrorBoundary";
+import LoginForm from "./components/LoginForm";
+import Notification from "./components/Notification";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
-import LoginForm from "./components/LoginForm";
-import BlogForm from "./components/BlogForm";
-import { Container, AppBar, Toolbar, Button, Typography } from "@mui/material";
-import ErrorBoundary from "./components/ErrorBoundary";
-import Notification from "./components/Notification";
-import useNotify from "./hooks/useNotify";
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
-  const { notify } = useNotify();
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
-  }, []);
+  const { data: blogs = [] } = useQuery({
+    queryKey: ["blogs"],
+    queryFn: blogService.getAll,
+  });
+
+  const addLikeMutation = useMutation({
+    mutationFn: blogService.update,
+    onSuccess: (updatedBlog) => {
+      const blogs = queryClient.getQueryData(["blogs"]);
+      queryClient.setQueryData(
+        ["blogs"],
+        blogs.map((b) => (b.id === updatedBlog.id ? updatedBlog : b)),
+      );
+    },
+  });
+
+  const deleteBlogMutation = useMutation({
+    mutationFn: blogService.deleteBlog,
+    onSuccess: (_, id) => {
+      const blogs = queryClient.getQueryData(["blogs"]);
+      queryClient.setQueryData(
+        ["blogs"],
+        blogs.filter((b) => b.id !== id),
+      );
+    },
+  });
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogListUser");
@@ -45,29 +67,14 @@ const App = () => {
   const match = useMatch("/blogs/:id");
   const blog = match ? blogs.find((blog) => blog.id === match.params.id) : null;
 
-  const addLike = async (blog) => {
-    const updatedBlog = {
-      ...blog,
-      likes: blog.likes + 1,
-    };
-    await blogService.update(updatedBlog);
-    setBlogs(blogs.map((b) => (b.id === updatedBlog.id ? updatedBlog : b)));
+  const addLike = (blog) => {
+    const updatedBlog = { ...blog, likes: blog.likes + 1 };
+    addLikeMutation.mutate(updatedBlog);
   };
 
-  const removeBlog = async (blog) => {
-    await blogService.deleteBlog(blog.id);
-    setBlogs(blogs.filter((b) => b.id !== blog.id));
+  const removeBlog = (blog) => {
+    deleteBlogMutation.mutate(blog.id);
     navigate("/");
-  };
-
-  const addBlog = async (newBlog) => {
-    try {
-      const response = await blogService.create(newBlog);
-      setBlogs(blogs.concat(response));
-      navigate("/");
-    } catch (error) {
-      notify(error, "error");
-    }
   };
 
   return (
@@ -115,7 +122,7 @@ const App = () => {
               }
             />
             <Route path="/" element={<BlogList user={user} />} />
-            <Route path="/create" element={<BlogForm createBlog={addBlog} />} />
+            <Route path="/create" element={<BlogForm />} />
             <Route path="/login" element={<LoginForm login={login} />} />
             <Route path="*" element={<h1>404 - Page not found</h1>} />
           </Routes>
