@@ -2,8 +2,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, TextField } from "@mui/material";
 import useNotify from "../hooks/useNotify";
+import useUser from "../hooks/useUser";
 
-const LoginForm = ({ login }) => {
+const LoginForm = () => {
+  const { login } = useUser();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();

@@ -1,6 +1,8 @@
 import { Card, CardContent, Typography, Link, Button } from "@mui/material";
+import useUser from "../hooks/useUser";
 
-const Blog = ({ blog, addLike, removeBlog, user }) => {
+const Blog = ({ blog, addLike, removeBlog }) => {
+  const { user } = useUser();
   if (!blog) {
     return null;
   }

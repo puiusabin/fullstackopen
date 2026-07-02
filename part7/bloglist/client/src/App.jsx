@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Container, AppBar, Toolbar, Button, Typography } from "@mui/material";
 import { Link, Routes, Route, useMatch, useNavigate } from "react-router-dom";
@@ -9,10 +8,10 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import LoginForm from "./components/LoginForm";
 import Notification from "./components/Notification";
 import blogService from "./services/blogs";
-import loginService from "./services/login";
+import useUser from "./hooks/useUser";
 
 const App = () => {
-  const [user, setUser] = useState(null);
+  const { user, logout } = useUser();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -27,7 +26,7 @@ const App = () => {
       const blogs = queryClient.getQueryData(["blogs"]);
       queryClient.setQueryData(
         ["blogs"],
-        blogs.map((b) => (b.id === updatedBlog.id ? updatedBlog : b)),
+        blogs.map((b) => (b.id === updatedBlog.id ? { ...updatedBlog, user: b.user } : b)),
       );
     },
   });
@@ -42,27 +41,6 @@ const App = () => {
       );
     },
   });
-
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem("loggedBlogListUser");
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON);
-      setUser(user);
-      blogService.setToken(user.token);
-    }
-  }, []);
-
-  const login = async (username, password) => {
-    const user = await loginService.login({ username, password });
-    blogService.setToken(user.token);
-    window.localStorage.setItem("loggedBlogListUser", JSON.stringify(user));
-    setUser(user);
-  };
-
-  const handleLogout = () => {
-    window.localStorage.removeItem("loggedBlogListUser");
-    setUser(null);
-  };
 
   const match = useMatch("/blogs/:id");
   const blog = match ? blogs.find((blog) => blog.id === match.params.id) : null;
@@ -94,7 +72,7 @@ const App = () => {
                 <Button color="inherit" component={Link} to="/create">
                   new blog
                 </Button>
-                <Button color="inherit" onClick={handleLogout}>
+                <Button color="inherit" onClick={logout}>
                   logout
                 </Button>{" "}
               </div>
@@ -117,13 +95,12 @@ const App = () => {
                   blog={blog}
                   addLike={addLike}
                   removeBlog={removeBlog}
-                  user={user}
                 />
               }
             />
-            <Route path="/" element={<BlogList user={user} />} />
+            <Route path="/" element={<BlogList />} />
             <Route path="/create" element={<BlogForm />} />
-            <Route path="/login" element={<LoginForm login={login} />} />
+            <Route path="/login" element={<LoginForm />} />
             <Route path="*" element={<h1>404 - Page not found</h1>} />
           </Routes>
         </ErrorBoundary>
