@@ -6,30 +6,41 @@ import BlogForm from "./BlogForm";
 import Togglable from "./Togglable";
 import { Link } from "react-router-dom";
 import useNotify from "../hooks/useNotify";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 const BlogList = () => {
-  const [blogs, setBlogs] = useState([]);
   const { notify } = useNotify();
+  const queryClient = useQueryClient();
   const blogFormRef = useRef();
+
+  const result = useQuery({
+    queryKey: ["blogs"],
+    queryFn: async () => await blogService.getAll(),
+  });
+
+  const newBlogMutation = useMutation({
+    mutationFn: blogService.create,
+    onSuccess: (newBlog) => {
+      const blogs = queryClient.getQueryData(["blogs"]);
+      queryClient.setQueryData(["blogs"], blogs.concat(newBlog));
+      notify(
+        `a new blog ${newBlog.title} by ${newBlog.author} created`,
+        "success",
+      );
+    },
+  });
+
+  if (result.isPending) {
+    return <div>loading data...</div>;
+  }
+
+  const blogs = result.data;
 
   const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes);
 
-  useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
-  }, []);
-
   const addBlog = async (newBlog) => {
-    try {
-      blogFormRef.current.toggleVisibility();
-      const response = await blogService.create(newBlog);
-      setBlogs(blogs.concat(response));
-      notify(
-        `a new blog ${response.title} by ${response.author} created`,
-        "success",
-      );
-    } catch (error) {
-      notify(error, "error");
-    }
+    blogFormRef.current.toggleVisibility();
+    newBlogMutation.mutate(newBlog);
   };
 
   return (
